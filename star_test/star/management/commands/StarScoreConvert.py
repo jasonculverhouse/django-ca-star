@@ -12,6 +12,13 @@ def int_or_none(val):
         return int(val)
     except:
         return None
+
+def non_zero(val):
+    try:
+        val = int(val)
+        return val and val or None
+    except:
+        return None
         
 class Command(base.StarParseBaseCommand):
     args = '<star test result csv file> <startest fixture file.json>'
@@ -22,18 +29,19 @@ class Command(base.StarParseBaseCommand):
                 "model": "star.Score",
                 "pk": None,
                 "fields": {
-                    'county_code': int(row['County Code']), 'district_code': int(row['District Code']), 
-                    'school_code': int(row['School Code']), 
+                    'county': int_or_none(row['County Code']),
+                    'district': non_zero(row['District Code']), 
+                    'school': non_zero(row['School Code']), 
                     'charter_number': int(row['Charter Number']), 
                     'test_year': int(row['Test Year']), 
-                    'subgroup_id': int(row['Subgroup ID']), 
+                    'subgroup': int(row['Subgroup ID']), 
                     'test_type': row['Test Type'].strip(), 
                     'capa_assessment_level': int(row['CAPA Assessment Level']), 
                     'total_star_enrollment': int(row['Total STAR Enrollment']), 
                     'total_tested_at_entity_level': int(row['Total Tested At Entity Level']), 
                     'total_tested_at_subgroup_level': int(row['Total Tested At Subgroup Level']), 
                     'grade': int(row['Grade']), 
-                    'test_id': int(row['Test Id']), 
+                    'test': int(row['Test Id']), 
                     'star_reported_enrollment_capa_eligible': int_or_none(row['STAR Reported Enrollment/CAPA Eligible']), 
                     'students_tested': int(row['Students Tested']), 
                     'percent_tested': float_or_none(row['Percent Tested']), 
